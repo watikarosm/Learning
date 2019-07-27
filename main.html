@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <header>
+<title>OI - Admin Main</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../css/w3.css">
+<link rel="stylesheet" type="text/css" href="../../dist/semantic.min.css">
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-firestore.js"></script>
+  <script src="hotkeys.min.js"></script>
+  <script src="timeout.js"></script>
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th {
+      background: #000000;
+      color: #ffffff;
+      text-align: center;
+      padding: 8px;
+    }
+    tr:nth-child(even) {
+      background-color: #f1f1f1;
+      border-color: darkslategrey;
+      border:darkslategrey;
+    }
+    tr:nth-child(odd) {
+      background-color: #dddddd;
+    }
+    td {
+      text-align: left;
+      border:darkviolet;
+    }
+
+</style>
+</header>
+<body class="w3-light-grey">
+<!-- Top container -->
+<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open(event, 'navbar');"><i class="fa fa-bars"></i>  Menu</button>
+  <span class="w3-bar-item w3-right">OI</span>
+  <div class="w3-col s4">
+      <img src="../../img/Inventory-maintenance-icon.png" class="w3-square w3-margin-right" style="width:46px">
+    </div>
+</div>
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:200px;" id="mySidebar"><br>
+
+  <div class="w3-bar-block" id="navbar">
+    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+    <h3 class="w3-padding">Admin Dashboard</h3>
+    <a href="main.html" class="w3-bar-item w3-button w3-padding">Admin Main Panel</a>
+    <a href="workspace.html" class="w3-bar-item w3-button w3-padding">Admin Workspace</a>
+    <a href="settings.html" class="w3-bar-item w3-button w3-padding">Admin Settings</a>
+    <a href="officeview.html" class="w3-bar-item w3-button w3-padding">Admin Office View</a>
+    <a href="../../logout.html" class="w3-bar-item w3-button w3-padding">Log Out</a>
+
+  </div>
+</nav>
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:200px; margin-top:43px;">
+  <h2>Main Panel</h2>
+  <!--The whole workspace-->
+  <div style="display: inline-block; width:100%;">
+    <div class="w3-display-top " style="display: inline-block; overflow: scroll">
+      <!-- Tab buttons -->
+      <div class="w3-bar w3-black">
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'MainTab');"></button>
+      </div>
+      <!-- Tabs -->
+      <div>
+        <!-- Main Tab -->
+        <div id="MainTab" class="w3-container w3-white w3-padding-16 myLink">
+          <div style="display: inline-block">
+            <!-- Low Items -->
+            <h3>Low Item Status</h3>
+            <p>Display list of low items through item id, name, and quanity</p>
+            <div style="height: auto; width: auto; overflow: scroll">
+              <ul id="lowItem"></ul>
+            </div>
+            <div style="overflow: scroll">
+            <!-- Equipment Faults -->
+            <h3>Equipment Faults Status</h3>
+            <div style="height: auto; width: auto;">
+              <div>
+            <p style="width: inherit">Condition of items:</p>
+            <ul>
+              <li>New</li>
+              <li>Good</li>
+              <li>Fair</li>
+              <li>Bad (need repair or replace</li>
+              <li>Need disposing</li>
+            </ul>
+            </div>
+            <div style="height: auto; width: auto; ">
+              <table><thead><th>Item Name</th><th>Item Description</th><th>Item Condition</th></thead></table>
+              <table id="table"></table>
+            </div>
+            </div>
+            </div>
+            <div style="overflow: scroll">
+            <!-- Work Order Request -->
+            <h3>Work Order Status</h3>
+            <div style="height: auto; width: auto;">
+              <p>Display the brief summary of workorder status</p>
+              <div style="height: auto; width: 90%; word-wrap: break-word">
+                <ul id="workOrder"></ul>
+                <ul id="order"></ul>
+              </div>
+            </div>
+            </div>
+            <div style="overflow: scroll">
+                <h3>Office Supply Inventory</h3>
+                <ul id="supplyList"></ul>
+              </div>
+            <div style="overflow: scroll">
+              <h3>Equipment Inventory</h3>
+              <ul id="equipmentList"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Second Tab on the Right side -->
+    <div style ="display: inline-block; vertical-align: top; width:39%;">
+        <div class="w3-display-top " style="width:100%; height: 450px; ">
+          <!-- Tab buttons -->
+          <div class="w3-bar w3-black">
+              <button class="w3-bar-item w3-button tttabbb" onclick="openLink2(event, 'AnnouncementsTab');"></button>
+          </div>
+          <!--Tab1 (Announcements)-->
+          <div id="AnnouncementsTab" class="w3-container w3-white w3-padding-16 myLink2">
+            <!-- Top Part (Display past announcements) -->
+            <h3>Past Announcements</h3>                
+            <div id="pastAnnouncementsList" style="height: 360px; overflow: scroll">
+            </div>
+            <input id="selectedAnnouncement" style="width: 300px; height: 30px;" placeholder="Click Announcement to delete"></input>
+            <button id="deleteButton" style="height: 30px">Delete</button>
+            <!-- Bottom Part (Send Announcements) -->
+            <h3>Send New Announcement</h3>
+            <div style="height: 170px; overflow: scroll">
+              <input id="title" type="text" placeholder="Type title..." style="width: 302px; height: 40px;"/><br>
+              <!--<input id="body" type="text" placeholder="Body" style="width: 300px; height: 100px;"/>-->
+              <textarea id="body" placeholder="Type body..." cols=40 rows=5 ></textarea>
+              <button id="submitButton1">Send Announcement</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<!-- !!! Move firestore script up to the head above!!! -->
+<!-- TODO: Add SDKs for Firebase products that you want to use https://firebase.google.com/docs/web/etup#config-web-app -->
+
+<script src="../Admin/AdminMain/main.js"></script>
+<script src="../Admin/AdminMain/equipment.js"></script>
+<script src="../Admin/AdminMain/officeSupply.js"></script>
+<script src="../Admin/AdminMain/lowItem.js"></script>
+<script src="../Admin/AdminMain/workOrder.js"></script>
+<script src="shortcuts.js"></script>
+<script src="../Admin/AdminMain/displayFormat.js"></script>
+
+</body>
+</html>
